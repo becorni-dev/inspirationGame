@@ -1,0 +1,167 @@
+{
+	"_aide": "Liste des images du jeu. Chaque image a son prompt Gemini. Le jeu utilise un dessin procédural tant que l'image n'existe pas.",
+	"entries": [
+		{
+			"id": "terrain_herbe",
+			"name": "Sol : herbe",
+			"usage": "Herbe du plateau et des collines (shader du terrain)",
+			"size": 1024,
+			"tileable": true,
+			"kind": "texture",
+			"prompt": "Lush temperate meadow grass ground seen from directly above, short mixed grass blades with small clover, a few dry yellow blades and tiny wildflowers, natural variation. Seamless tileable texture, perfectly repeating on all four edges, viewed straight from above, orthographic, flat even overcast lighting, no cast shadows, no perspective, no objects, no text, photorealistic, physically accurate colors, high detail, square format, 2K or 4K resolution."
+		},
+		{
+			"id": "terrain_roche",
+			"name": "Sol : roche",
+			"usage": "Pentes raides des montagnes",
+			"size": 1024,
+			"tileable": true,
+			"kind": "texture",
+			"prompt": "Grey granite mountain rock surface seen from directly above, cracks, lichen spots, weathered stone, natural variation. Seamless tileable texture, perfectly repeating on all four edges, viewed straight from above, orthographic, flat even overcast lighting, no cast shadows, no perspective, no objects, no text, photorealistic, physically accurate colors, high detail, square format, 2K or 4K resolution."
+		},
+		{
+			"id": "terrain_sable",
+			"name": "Sol : sable",
+			"usage": "Plages et bords de l'eau",
+			"size": 1024,
+			"tileable": true,
+			"kind": "texture",
+			"prompt": "Fine golden beach sand seen from directly above, subtle wind ripples, a few tiny shells and pebbles. Seamless tileable texture, perfectly repeating on all four edges, viewed straight from above, orthographic, flat even overcast lighting, no cast shadows, no perspective, no objects, no text, photorealistic, physically accurate colors, high detail, square format, 2K or 4K resolution."
+		},
+		{
+			"id": "terrain_neige",
+			"name": "Sol : neige",
+			"usage": "Sommets enneigés",
+			"size": 1024,
+			"tileable": true,
+			"kind": "texture",
+			"prompt": "Fresh compact mountain snow surface seen from directly above, soft wind-blown texture, subtle blue tint in hollows. Seamless tileable texture, perfectly repeating on all four edges, viewed straight from above, orthographic, flat even overcast lighting, no cast shadows, no perspective, no objects, no text, photorealistic, physically accurate colors, high detail, square format, 2K or 4K resolution."
+		},
+		{
+			"id": "route_asphalte",
+			"name": "Route : asphalte",
+			"usage": "Chaussée des routes (le marquage reste dessiné par le jeu)",
+			"size": 1024,
+			"tileable": true,
+			"kind": "texture",
+			"prompt": "Dark grey urban asphalt road surface seen from directly above, fine aggregate, small cracks and patches, no road markings. Seamless tileable texture, perfectly repeating on all four edges, viewed straight from above, orthographic, flat even overcast lighting, no cast shadows, no perspective, no objects, no text, photorealistic, physically accurate colors, high detail, square format, 2K or 4K resolution."
+		},
+		{
+			"id": "mur_maison",
+			"name": "Mur : maison",
+			"usage": "Murs des maisons (teinte ajoutée par le jeu)",
+			"size": 1024,
+			"tileable": true,
+			"kind": "texture",
+			"prompt": "Light cream painted lime plaster wall of a European house, subtle trowel marks, faint stains. Seamless tileable texture, perfectly repeating on all four edges, front orthographic view of a flat wall surface, flat even lighting, no windows, no doors, no perspective, no text, photorealistic, square format, 2K resolution."
+		},
+		{
+			"id": "mur_immeuble",
+			"name": "Mur : immeuble",
+			"usage": "Murs des immeubles",
+			"size": 1024,
+			"tileable": true,
+			"kind": "texture",
+			"prompt": "Modern light grey architectural precast concrete panel wall, thin panel joints, subtle water stains. Seamless tileable texture, perfectly repeating on all four edges, front orthographic view of a flat wall surface, flat even lighting, no windows, no doors, no perspective, no text, photorealistic, square format, 2K resolution."
+		},
+		{
+			"id": "mur_commerce",
+			"name": "Mur : commerce",
+			"usage": "Murs des commerces",
+			"size": 1024,
+			"tileable": true,
+			"kind": "texture",
+			"prompt": "Warm red-brown brick wall with light mortar joints, slightly weathered bricks. Seamless tileable texture, perfectly repeating on all four edges, front orthographic view of a flat wall surface, flat even lighting, no windows, no doors, no perspective, no text, photorealistic, square format, 2K resolution."
+		},
+		{
+			"id": "mur_usine",
+			"name": "Mur : usine",
+			"usage": "Murs de l'usine",
+			"size": 1024,
+			"tileable": true,
+			"kind": "texture",
+			"prompt": "Industrial corrugated steel cladding wall, vertical ribs, light grey paint with rust streaks. Seamless tileable texture, perfectly repeating on all four edges, front orthographic view of a flat wall surface, flat even lighting, no windows, no doors, no perspective, no text, photorealistic, square format, 2K resolution."
+		},
+		{
+			"id": "feuillage",
+			"name": "Feuillage",
+			"usage": "Feuilles des arbres (mélangée à leur couleur)",
+			"size": 512,
+			"tileable": true,
+			"kind": "texture",
+			"prompt": "Dense green tree foliage canopy seen from directly above, overlapping leaves, natural light and dark green variation. Seamless tileable texture, perfectly repeating on all four edges, viewed straight from above, orthographic, flat even overcast lighting, no cast shadows, no perspective, no objects, no text, photorealistic, physically accurate colors, high detail, square format, 2K or 4K resolution."
+		},
+		{
+			"id": "icone_road",
+			"name": "Icône : route",
+			"usage": "Bouton de la barre d'outils",
+			"size": 512,
+			"tileable": false,
+			"kind": "icon",
+			"prompt": "Game interface icon: a miniature 3D model of a short asphalt road crossing with white markings and a tiny street lamp, three-quarter isometric view from above, centered, occupying 70 percent of the frame, on a plain very dark blue-black background (#0c1014) with a subtle soft amber rim light, photorealistic miniature, tilt-shift look, crisp details, no text, no border, square format, 1K resolution."
+		},
+		{
+			"id": "icone_house",
+			"name": "Icône : maison",
+			"usage": "Bouton de la barre d'outils",
+			"size": 512,
+			"tileable": false,
+			"kind": "icon",
+			"prompt": "Game interface icon: a miniature 3D model of a small cozy European suburban house with a pitched terracotta roof and a tiny garden hedge, three-quarter isometric view from above, centered, occupying 70 percent of the frame, on a plain very dark blue-black background (#0c1014) with a subtle soft amber rim light, photorealistic miniature, tilt-shift look, crisp details, no text, no border, square format, 1K resolution."
+		},
+		{
+			"id": "icone_tower",
+			"name": "Icône : immeuble",
+			"usage": "Bouton de la barre d'outils",
+			"size": 512,
+			"tileable": false,
+			"kind": "icon",
+			"prompt": "Game interface icon: a miniature 3D model of a modern residential apartment tower with many lit windows, three-quarter isometric view from above, centered, occupying 70 percent of the frame, on a plain very dark blue-black background (#0c1014) with a subtle soft amber rim light, photorealistic miniature, tilt-shift look, crisp details, no text, no border, square format, 1K resolution."
+		},
+		{
+			"id": "icone_shop",
+			"name": "Icône : commerce",
+			"usage": "Bouton de la barre d'outils",
+			"size": 512,
+			"tileable": false,
+			"kind": "icon",
+			"prompt": "Game interface icon: a miniature 3D model of a small corner shop with a glowing neon sign and a striped awning, three-quarter isometric view from above, centered, occupying 70 percent of the frame, on a plain very dark blue-black background (#0c1014) with a subtle soft amber rim light, photorealistic miniature, tilt-shift look, crisp details, no text, no border, square format, 1K resolution."
+		},
+		{
+			"id": "icone_factory",
+			"name": "Icône : usine",
+			"usage": "Bouton de la barre d'outils",
+			"size": 512,
+			"tileable": false,
+			"kind": "icon",
+			"prompt": "Game interface icon: a miniature 3D model of a compact factory with a sawtooth roof and two smoking chimneys, three-quarter isometric view from above, centered, occupying 70 percent of the frame, on a plain very dark blue-black background (#0c1014) with a subtle soft amber rim light, photorealistic miniature, tilt-shift look, crisp details, no text, no border, square format, 1K resolution."
+		},
+		{
+			"id": "icone_wind",
+			"name": "Icône : éolienne",
+			"usage": "Bouton de la barre d'outils",
+			"size": 512,
+			"tileable": false,
+			"kind": "icon",
+			"prompt": "Game interface icon: a miniature 3D model of a modern white wind turbine on a small grassy hill, three-quarter isometric view from above, centered, occupying 70 percent of the frame, on a plain very dark blue-black background (#0c1014) with a subtle soft amber rim light, photorealistic miniature, tilt-shift look, crisp details, no text, no border, square format, 1K resolution."
+		},
+		{
+			"id": "icone_solar",
+			"name": "Icône : centrale solaire",
+			"usage": "Bouton de la barre d'outils",
+			"size": 512,
+			"tileable": false,
+			"kind": "icon",
+			"prompt": "Game interface icon: a miniature 3D model of a small solar farm with rows of tilted photovoltaic panels, three-quarter isometric view from above, centered, occupying 70 percent of the frame, on a plain very dark blue-black background (#0c1014) with a subtle soft amber rim light, photorealistic miniature, tilt-shift look, crisp details, no text, no border, square format, 1K resolution."
+		},
+		{
+			"id": "icone_park",
+			"name": "Icône : parc",
+			"usage": "Bouton de la barre d'outils",
+			"size": 512,
+			"tileable": false,
+			"kind": "icon",
+			"prompt": "Game interface icon: a miniature 3D model of a small city park with a round fountain, trees and paths, three-quarter isometric view from above, centered, occupying 70 percent of the frame, on a plain very dark blue-black background (#0c1014) with a subtle soft amber rim light, photorealistic miniature, tilt-shift look, crisp details, no text, no border, square format, 1K resolution."
+		}
+	]
+}

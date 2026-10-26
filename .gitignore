@@ -1,0 +1,5 @@
+# Dossiers générés par Godot
+.godot/
+*.import
+export/
+# Images de l'atelier : on garde les PNG, Godot recrée les .import

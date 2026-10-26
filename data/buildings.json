@@ -1,0 +1,60 @@
+{
+	"_aide": "Contenu des bâtiments. Modifiable sans toucher au code. Coûts en crédits, électricité en MW, durée de construction en secondes réelles.",
+	"order": ["road", "house", "tower", "shop", "factory", "wind", "solar", "park"],
+	"types": {
+		"road": {
+			"name": "Route", "key": "R", "cost": 40, "upkeep": 0.2, "size": [1, 1],
+			"desc": "Relie les bâtiments. Sans route, un bâtiment ne fonctionne pas.",
+			"color": "#3a4048"
+		},
+		"house": {
+			"name": "Maison", "key": "1", "cost": 900, "upkeep": 1.0, "size": [1, 1],
+			"residents": 6, "power": -1, "build_time": 2.0,
+			"desc": "Loge une famille. Les parcs proches rendent ses habitants plus heureux.",
+			"color": "#d9c7a6"
+		},
+		"tower": {
+			"name": "Immeuble", "key": "2", "cost": 6500, "upkeep": 9.0, "size": [1, 1],
+			"residents": 48, "power": -6, "build_time": 4.5, "unlock_population": 60,
+			"desc": "Beaucoup d'habitants sur une seule case. Se débloque à 60 habitants.",
+			"color": "#8fa3b5"
+		},
+		"shop": {
+			"name": "Commerce", "key": "3", "cost": 1800, "upkeep": 2.0, "size": [1, 1],
+			"jobs": 10, "power": -2, "tax_per_worker": 1.6, "build_time": 2.5,
+			"desc": "Emplois et animation : son enseigne brille la nuit.",
+			"color": "#c98d5b"
+		},
+		"factory": {
+			"name": "Usine", "key": "4", "cost": 7500, "upkeep": 6.0, "size": [2, 2],
+			"jobs": 45, "power": -14, "tax_per_worker": 2.4, "pollution": 18, "pollution_radius": 5, "build_time": 4.0,
+			"desc": "Beaucoup d'emplois bien payés, mais elle pollue les maisons proches.",
+			"color": "#9a8f84"
+		},
+		"wind": {
+			"name": "Éolienne", "key": "5", "cost": 2600, "upkeep": 1.5, "size": [1, 1],
+			"power": 12, "build_time": 3.0,
+			"desc": "Électricité propre. Produit plus quand le vent souffle.",
+			"color": "#e9eef2"
+		},
+		"solar": {
+			"name": "Centrale solaire", "key": "6", "cost": 5200, "upkeep": 2.0, "size": [2, 2],
+			"power": 30, "build_time": 3.0,
+			"desc": "Beaucoup d'électricité le jour, rien la nuit : il faut des éoliennes en appoint.",
+			"color": "#2a3f63"
+		},
+		"park": {
+			"name": "Parc", "key": "7", "cost": 700, "upkeep": 0.8, "size": [1, 1],
+			"happiness": 12, "happiness_radius": 4, "build_time": 1.5,
+			"desc": "Rend heureux les habitants dans un rayon de 4 cases.",
+			"color": "#5f8f3e"
+		}
+	},
+	"economy": {
+		"start_money": 60000,
+		"tax_per_resident": 0.35,
+		"move_in_rate": 0.12,
+		"unemployment_happiness": 25,
+		"blackout_happiness": 30
+	}
+}
