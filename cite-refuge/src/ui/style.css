@@ -1,0 +1,50 @@
+/* Thème de La Cité-Refuge : nuit froide dehors, or chaud des lanternes. */
+:root {
+  --bg: #0b0d12;
+  --panel: rgba(14, 16, 22, 0.86);
+  --line: #3a3326;
+  --fg: #e9e2d0;
+  --muted: #9a917e;
+  --gold: #e3b863;
+  --ember: #ff8a3a;
+  --frost: #9fc3e0;
+  --bad: #e0605a;
+  --title: "Cinzel", "Georgia", serif;
+  --text: "EB Garamond", "Georgia", serif;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: var(--bg); color: var(--fg); font-family: var(--text); overflow: hidden; }
+#stage, #stage canvas { position: fixed; inset: 0; display: block; }
+#hud { position: fixed; inset: 0; pointer-events: none; }
+.panel { pointer-events: auto; background: var(--panel); border: 1px solid var(--line); border-radius: 4px; box-shadow: 0 8px 30px rgba(0,0,0,.45); backdrop-filter: blur(6px); }
+.top { position: absolute; top: 12px; left: 12px; right: 12px; display: flex; align-items: center; gap: 22px; padding: 8px 16px; }
+.brand { font-family: var(--title); font-weight: 700; letter-spacing: .18em; color: var(--gold); font-size: 20px; }
+.clock { font-size: 18px; }
+.clock b { font-family: var(--title); font-weight: 500; letter-spacing: .08em; color: var(--gold); }
+.stat { font-size: 15px; color: var(--muted); }
+.stat b { color: var(--fg); font-variant-numeric: tabular-nums; }
+.spacer { flex: 1; }
+.btn { pointer-events: auto; font-family: var(--text); font-size: 16px; color: var(--fg); background: rgba(40,34,24,.6); border: 1px solid var(--line); border-radius: 4px; padding: 5px 12px; cursor: pointer; }
+.btn:hover { border-color: var(--gold); color: #fff; }
+.btn.on { border-color: var(--gold); color: var(--gold); background: rgba(90,66,24,.55); }
+.season { display: inline-flex; align-items: center; gap: 8px; }
+.season-bar { width: 120px; height: 5px; background: #2a2620; border-radius: 3px; overflow: hidden; }
+.season-bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--gold), var(--ember)); }
+.tools { position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; padding: 10px; }
+.tool { width: 128px; text-align: left; padding: 8px 10px; }
+.tool .k { font-family: var(--title); color: var(--gold); font-size: 12px; }
+.tool .n { display: block; font-size: 17px; }
+.tool .z { display: block; color: var(--muted); font-size: 13px; font-style: italic; }
+.hint { position: absolute; bottom: 104px; left: 50%; transform: translateX(-50%); padding: 6px 14px; font-size: 16px; color: var(--muted); }
+.toast { position: absolute; top: 76px; left: 50%; transform: translateX(-50%); padding: 8px 16px; font-size: 17px; transition: opacity .5s; }
+.info { position: absolute; right: 14px; top: 80px; width: 280px; padding: 14px 16px; }
+.info h3 { margin: 0 0 4px; font-family: var(--title); color: var(--gold); letter-spacing: .08em; font-weight: 500; }
+.info p { margin: 4px 0; }
+.info .muted { color: var(--muted); font-style: italic; }
+.title-card { position: absolute; right: 60px; top: 50%; transform: translateY(-50%); padding: 32px 38px; max-width: 520px; transition: opacity .8s; }
+.title-card h1 { font-family: var(--title); font-size: 54px; margin: 0; letter-spacing: .08em; color: #f3ead2; }
+.title-card .sub { font-family: var(--title); color: var(--gold); letter-spacing: .3em; font-size: 13px; }
+.title-card p { font-size: 19px; line-height: 1.45; color: #d8cfba; }
+.title-card .btn { font-size: 20px; padding: 10px 26px; margin-top: 10px; }
+.hidden { opacity: 0; pointer-events: none !important; }
+.hidden * { pointer-events: none !important; }

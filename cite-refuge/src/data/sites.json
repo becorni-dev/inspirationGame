@@ -1,0 +1,115 @@
+{
+  "_aide": "Les emplacements constructibles, en coordonnées du monde (x au centre de l'emplacement, y = sol). Le monde fait 3200 × 1600.",
+  "zones": {
+    "cite": {
+      "name": "La cité",
+      "desc": "Le plateau derrière les remparts"
+    },
+    "terrasses": {
+      "name": "Les terrasses",
+      "desc": "Taillées dans la falaise, au vent et à la lumière"
+    },
+    "galeries": {
+      "name": "Les galeries",
+      "desc": "Sous la montagne, chaudes et sûres"
+    }
+  },
+  "ledges": [
+    {
+      "zone": "cite",
+      "y": 1050,
+      "x0": 760,
+      "x1": 1660,
+      "slots": 10
+    },
+    {
+      "zone": "terrasses",
+      "y": 840,
+      "x0": 1600,
+      "x1": 1800,
+      "slots": 3
+    },
+    {
+      "zone": "terrasses",
+      "y": 650,
+      "x0": 1840,
+      "x1": 2050,
+      "slots": 3
+    },
+    {
+      "zone": "terrasses",
+      "y": 470,
+      "x0": 2090,
+      "x1": 2250,
+      "slots": 2
+    },
+    {
+      "zone": "galeries",
+      "y": 1260,
+      "x0": 1480,
+      "x1": 2260,
+      "slots": 6
+    },
+    {
+      "zone": "galeries",
+      "y": 1430,
+      "x0": 1700,
+      "x1": 2600,
+      "slots": 7
+    }
+  ],
+  "start": [
+    {
+      "slot": "cite-0",
+      "type": "phare"
+    },
+    {
+      "slot": "cite-1",
+      "type": "maison"
+    },
+    {
+      "slot": "cite-2",
+      "type": "maison"
+    },
+    {
+      "slot": "cite-4",
+      "type": "hall"
+    },
+    {
+      "slot": "cite-5",
+      "type": "maison"
+    },
+    {
+      "slot": "cite-6",
+      "type": "grenier"
+    },
+    {
+      "slot": "cite-8",
+      "type": "maison"
+    },
+    {
+      "slot": "terrasses-0",
+      "type": "maison"
+    },
+    {
+      "slot": "terrasses-3",
+      "type": "serre"
+    },
+    {
+      "slot": "terrasses-6",
+      "type": "phare"
+    },
+    {
+      "slot": "galeries-1",
+      "type": "forge"
+    },
+    {
+      "slot": "galeries-3",
+      "type": "maison"
+    },
+    {
+      "slot": "galeries-8",
+      "type": "forge"
+    }
+  ]
+}

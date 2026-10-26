@@ -1,0 +1,12 @@
+{
+  "_aide": "Les bâtiments du prototype. zones : où on peut les bâtir (cite, terrasses, galeries).",
+  "order": ["maison", "grenier", "phare", "hall", "serre", "forge"],
+  "types": {
+    "maison": { "name": "Maison", "key": "1", "zones": ["cite", "terrasses", "galeries"], "desc": "Loge une famille de réfugiés.", "people": 5 },
+    "grenier": { "name": "Grenier", "key": "2", "zones": ["cite"], "desc": "Garde les récoltes pour l'hiver." },
+    "phare": { "name": "Tour-phare", "key": "3", "zones": ["cite", "terrasses"], "desc": "Une grande flamme qui repousse l'Ombre la nuit.", "light": 1.0 },
+    "hall": { "name": "Hall des peuples", "key": "4", "zones": ["cite"], "desc": "Le conseil de la cité s'y réunit.", "people": 3 },
+    "serre": { "name": "Serre elfe", "key": "5", "zones": ["terrasses"], "desc": "Des chants elfes y font pousser des herbes même en hiver." },
+    "forge": { "name": "Forge naine", "key": "6", "zones": ["galeries"], "desc": "Le cœur chaud des galeries : fer et runes.", "people": 4 }
+  }
+}

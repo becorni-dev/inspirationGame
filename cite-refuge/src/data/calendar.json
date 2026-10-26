@@ -1,0 +1,11 @@
+{
+  "_aide": "Le calendrier de Hautbourg. Une année = 4 saisons. Durée d'une heure de jeu en secondes réelles à vitesse 1.",
+  "daysPerSeason": 6,
+  "secondsPerHour": 1.2,
+  "seasons": [
+    { "id": "printemps", "name": "Printemps", "sunrise": 6.0, "sunset": 20.0 },
+    { "id": "ete", "name": "Été", "sunrise": 5.0, "sunset": 21.5 },
+    { "id": "automne", "name": "Automne", "sunrise": 7.0, "sunset": 18.5 },
+    { "id": "hiver", "name": "Hiver", "sunrise": 8.5, "sunset": 16.5 }
+  ]
+}
