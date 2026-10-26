@@ -1,6 +1,10 @@
 {
   "_aide": "Les emplacements constructibles, en coordonnées du monde (x au centre de l'emplacement, y = sol). Le monde fait 3200 × 1600.",
   "zones": {
+    "plaine": {
+      "name": "La plaine",
+      "desc": "Hors des murs : champs et bois, riches mais exposés"
+    },
     "cite": {
       "name": "La cité",
       "desc": "Le plateau derrière les remparts"
@@ -15,6 +19,13 @@
     }
   },
   "ledges": [
+    {
+      "zone": "plaine",
+      "y": 1050,
+      "x0": 90,
+      "x1": 630,
+      "slots": 6
+    },
     {
       "zone": "cite",
       "y": 1050,
@@ -108,8 +119,16 @@
       "type": "maison"
     },
     {
-      "slot": "galeries-8",
-      "type": "forge"
+      "slot": "plaine-1",
+      "type": "ferme"
+    },
+    {
+      "slot": "plaine-2",
+      "type": "ferme"
+    },
+    {
+      "slot": "plaine-4",
+      "type": "bucheron"
     }
   ]
 }

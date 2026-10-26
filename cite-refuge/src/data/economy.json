@@ -1,0 +1,21 @@
+{
+  "_aide": "Les règles chiffrées de la cité. Les tableaux par saison suivent l'ordre printemps, été, automne, hiver.",
+  "start": { "food": 100, "wood": 60, "people": { "humain": 30, "nain": 10 } },
+  "foodPerPerson": 0.3,
+  "glean": [0.12, 0.12, 0.12, 0],
+  "_glean": "Les valides sans poste glanent dans la plaine : vivres par personne et par jour, selon la saison.",
+  "baseStorage": 120,
+  "heatPerHouse": [0, 0, 0.5, 1.5],
+  "galleryHeatFactor": 0.5,
+  "jobPriority": ["forge", "ferme", "serre", "bucheron"],
+  "winterShieldMax": 0.45,
+  "risk": {
+    "_aide": "Chance de mourir par jour et par personne.",
+    "homelessWinter": 0.06,
+    "coldNoWood": 0.04,
+    "galleryColdFactor": 0.5,
+    "hunger": 0.05
+  },
+  "wounds": { "healChance": 0.85, "_aide": "À chaque changement de saison, un blessé guérit (sinon il meurt)." },
+  "demolishRefund": 0.5
+}

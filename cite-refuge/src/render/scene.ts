@@ -2,6 +2,7 @@
 import { Application, Container, Graphics, Sprite, Texture } from "pixi.js";
 import { type CalendarView, daylight, shadowReach, snowCover } from "../engine/calendar";
 import { BUILDINGS, type CityState, SLOTS, type Slot } from "../engine/city";
+import { type Column, type ColumnChoice, type GameState, type Staff, buildError, dayInfo, housing } from "../engine/game";
 import { hash01, mulberry32 } from "../engine/rng";
 import { type BuildingView, type LightSpot, drawBuilding } from "./buildings";
 import { seasonPalette, skyColors } from "./palette";
@@ -17,7 +18,21 @@ interface Walker {
   speed: number;
   phase: number;
   inside: boolean;
+  pool: "city" | "gallery" | "plain";
+  rank: number; // ordre d'apparition quand la population grandit
   lantern: Sprite | null;
+}
+
+// Un réfugié de la colonne aux portes
+interface Refugee {
+  g: Graphics;
+  x: number;
+  target: number;
+  speed: number;
+  phase: number;
+  wounded: boolean;
+  mode: "arrive" | "enter" | "leave";
+  fade: number;
 }
 
 interface Particle {
@@ -54,8 +69,14 @@ export class Scene {
   fog: { s: Sprite; base: number; phase: number; row: number }[] = [];
   eyes: { g: Graphics; x: number; y: number; phase: number }[] = [];
   images = new Map<string, Texture>();
+  visible = { city: 0, gallery: 0, plain: 0 };
+  refugees: Refugee[] = [];
+  columnKey = "";
+  camps = new Graphics();
+  campLights: Sprite[] = [];
+  winter = false;
 
-  cam = { x: 1550, y: 880, zoom: 0.8 };
+  cam = { x: 1280, y: 900, zoom: 0.7 };
   time = 0;
   private lastSkyKey = "";
   private lastLook = "";
@@ -72,7 +93,7 @@ export class Scene {
 
     const stage = app.stage;
     stage.addChild(this.sky, this.stars, this.moon, this.far, this.mid, this.world, this.weatherLayer);
-    this.world.addChild(this.terrain.root, this.shadowLayer, this.buildingLayer, this.smokeLayer, this.walkersLayer, this.markerLayer, this.night, this.lightLayer);
+    this.world.addChild(this.terrain.root, this.shadowLayer, this.buildingLayer, this.camps, this.smokeLayer, this.walkersLayer, this.markerLayer, this.night, this.lightLayer);
     this.lightLayer.blendMode = "add";
 
     // Étoiles (fixes à l'écran)
@@ -124,29 +145,122 @@ export class Scene {
   }
 
   // --- Habitants ---
+  figure(small: boolean, coat: number, wounded = false): Graphics {
+    const g = new Graphics();
+    const h = small ? 9 : 12;
+    g.roundRect(-2.5, -h, 5, h - 2, 2).fill(coat);
+    g.circle(wounded ? 1 : 0, -h - 2.5 + (wounded ? 1.5 : 0), 2.6).fill(0xd9b89a);
+    if (small) g.poly([-2.5, -h + 1, 2.5, -h + 1, 0, -h + 6]).fill(0x8a6a4a);
+    if (wounded) g.rect(-2.6, -h + 3, 5.2, 1.6).fill(0xe8e2d6);
+    g.rect(-2, -2, 1.6, 2).fill(0x2a2a2a).rect(0.4, -2, 1.6, 2).fill(0x2a2a2a);
+    return g;
+  }
+
   buildWalkers(): void {
     const paths = [
-      { y: GROUND, min: 770, max: 1640, n: 14, inside: false },
-      { y: 840, min: 1600, max: 1800, n: 3, inside: false },
-      { y: 650, min: 1840, max: 2050, n: 3, inside: false },
-      { y: GALLERIES[0].y1, min: GALLERIES[0].x0 + 20, max: GALLERIES[0].x1 - 20, n: 7, inside: true },
-      { y: GALLERIES[1].y1, min: GALLERIES[1].x0 + 20, max: GALLERIES[1].x1 - 20, n: 7, inside: true },
+      { y: GROUND, min: 770, max: 1640, n: 18, pool: "city" as const },
+      { y: 840, min: 1600, max: 1800, n: 4, pool: "city" as const },
+      { y: 650, min: 1840, max: 2050, n: 4, pool: "city" as const },
+      { y: GALLERIES[0].y1, min: GALLERIES[0].x0 + 20, max: GALLERIES[0].x1 - 20, n: 9, pool: "gallery" as const },
+      { y: GALLERIES[1].y1, min: GALLERIES[1].x0 + 20, max: GALLERIES[1].x1 - 20, n: 9, pool: "gallery" as const },
+      { y: GROUND, min: 95, max: 640, n: 12, pool: "plain" as const },
     ];
     const coats = [0x6b3b2a, 0x3a4a5a, 0x5a5a3a, 0x7a6a5a, 0x4a3a5a, 0x2f4a3a, 0x8a5a3a];
     let k = 0;
     for (const p of paths) {
       for (let i = 0; i < p.n; i++, k++) {
-        const g = new Graphics();
-        const small = p.inside && hash01(k * 3) < 0.7; // les nains sont plus petits
-        const h = small ? 9 : 12;
-        const c = coats.at(Math.floor(hash01(k * 7) * coats.length)) ?? 0x6b3b2a;
-        g.roundRect(-2.5, -h, 5, h - 2, 2).fill(c);
-        g.circle(0, -h - 2.5, 2.6).fill(0xd9b89a);
-        if (small) g.poly([-2.5, -h + 1, 2.5, -h + 1, 0, -h + 6]).fill(0x8a6a4a);
-        g.rect(-2, -2, 1.6, 2).fill(0x2a2a2a).rect(0.4, -2, 1.6, 2).fill(0x2a2a2a);
+        const inside = p.pool === "gallery";
+        const small = inside && hash01(k * 3) < 0.8; // les nains sont plus petits
+        const g = this.figure(small, coats.at(Math.floor(hash01(k * 7) * coats.length)) ?? 0x6b3b2a);
         this.walkersLayer.addChild(g);
         const lantern = hash01(k * 17) < 0.35 ? this.addLight({ x: 0, y: 0, size: 60, color: 0xffc070, flicker: true }) : null;
-        this.walkers.push({ g, x: lerp(p.min, p.max, hash01(k * 5)), y: p.y, min: p.min, max: p.max, speed: (8 + hash01(k) * 10) * (hash01(k * 9) < 0.5 ? -1 : 1), phase: hash01(k * 2) * 6, inside: p.inside, lantern });
+        // Les rangs alternent entre les chemins pour que la foule grandisse partout à la fois
+        const rank = i / p.n + hash01(k * 41) * 0.01;
+        this.walkers.push({ g, x: lerp(p.min, p.max, hash01(k * 5)), y: p.y, min: p.min, max: p.max, speed: (8 + hash01(k) * 10) * (hash01(k * 9) < 0.5 ? -1 : 1), phase: hash01(k * 2) * 6, inside, pool: p.pool, rank, lantern });
+      }
+    }
+    for (const pool of ["city", "gallery", "plain"] as const) {
+      const list = this.walkers.filter((w) => w.pool === pool).sort((a, b) => a.rank - b.rank);
+      list.forEach((w, i) => (w.rank = i));
+    }
+  }
+
+  // La foule suit la population : habitants en surface, Nains dans les galeries, travailleurs aux champs
+  syncPeople(state: GameState, staff: Staff): void {
+    const h = housing(state);
+    const surface = h.surface.humain + h.surface.nain + h.homeless.humain + h.homeless.nain;
+    const gallery = h.gallery.humain + h.gallery.nain;
+    let plain = 0;
+    for (const b of Object.values(state.city.buildings)) {
+      const s = staff.slots[b.slot];
+      if (s && (b.type === "ferme" || b.type === "bucheron")) plain += s.humain + s.nain;
+    }
+    this.visible = { city: Math.round(surface * 0.45), gallery: Math.round(gallery * 0.9), plain: Math.round(plain * 0.6) };
+    this.winter = dayInfo(state.day).seasonIndex === 3;
+
+    // Les sans-abri campent dans la cité : une tente et un feu pour cinq
+    const homeless = h.homeless.humain + h.homeless.nain;
+    const free = SLOTS.filter((sl) => sl.zone === "cite" && !state.city.buildings[sl.id]);
+    const spots = free.length ? free.map((sl) => sl.x) : [790, 1650];
+    const n = Math.ceil(homeless / 5);
+    const c = this.camps;
+    c.clear();
+    for (const l of this.campLights) {
+      const i = this.lightSprites.findIndex((x) => x.s === l);
+      if (i >= 0) this.lightSprites.splice(i, 1);
+      l.destroy();
+    }
+    this.campLights = [];
+    for (let k = 0; k < n; k++) {
+      const x = (spots.at(k % spots.length) ?? 790) + (Math.floor(k / spots.length) % 2 ? 22 : -18);
+      c.poly([x - 12, GROUND, x, GROUND - 16, x + 12, GROUND]).fill(0x7a6a52);
+      c.poly([x - 3, GROUND, x, GROUND - 16, x + 3, GROUND]).fill(0x3a2f24);
+      c.rect(x + 15, GROUND - 3, 8, 3).fill(0x3a2a1e);
+      c.poly([x + 16, GROUND - 3, x + 19, GROUND - 11, x + 22, GROUND - 3]).fill(0xff8a2a);
+      this.campLights.push(this.addLight({ x: x + 19, y: GROUND - 6, size: 70, color: 0xff8a2a, flicker: true }));
+    }
+  }
+
+  // --- La colonne de réfugiés : elle arrive par la plaine et attend devant la porte ---
+  showColumn(c: Column): void {
+    const key = `${c.year}-${c.origin}`;
+    if (key === this.columnKey) return;
+    this.columnKey = key;
+    const coats = [0x5a4a3a, 0x4a4a4a, 0x6a5a48, 0x3a3a44, 0x5a4636];
+    const n = Math.min(30, c.able + c.wounded);
+    const wounded = Math.round((n * c.wounded) / (c.able + c.wounded));
+    for (let i = 0; i < n; i++) {
+      const hurt = i >= n - wounded; // les blessés traînent en queue de colonne
+      const g = this.figure(c.people === "nain", coats[i % coats.length], hurt);
+      this.walkersLayer.addChild(g);
+      this.refugees.push({ g, x: 80 - i * 18, target: 690 - i * 9, speed: hurt ? 30 : 46, phase: hash01(i * 3) * 6, wounded: hurt, mode: "arrive", fade: 1 });
+    }
+  }
+
+  releaseColumn(choice: ColumnChoice): void {
+    for (const r of this.refugees) {
+      if (r.mode !== "arrive") continue;
+      const enters = choice === "tous" || (choice === "valides" && !r.wounded);
+      r.mode = enters ? "enter" : "leave";
+      r.target = enters ? 790 : -260;
+      r.speed *= enters ? 1.3 : 0.8;
+    }
+  }
+
+  updateRefugees(dt: number, nightK: number): void {
+    for (let i = this.refugees.length - 1; i >= 0; i--) {
+      const r = this.refugees[i];
+      const dir = Math.sign(r.target - r.x);
+      if (Math.abs(r.target - r.x) > 1) r.x += dir * Math.min(Math.abs(r.target - r.x), r.speed * dt);
+      else if (r.mode !== "arrive") r.fade -= dt * 0.8;
+      if (r.mode === "leave" && r.x < 120) r.fade -= dt * 0.3;
+      const moving = Math.abs(r.target - r.x) > 1;
+      r.g.position.set(r.x, GROUND - (moving ? Math.abs(Math.sin(this.time * 6 + r.phase)) * 1.2 : 0));
+      r.g.scale.x = dir < 0 ? -1 : 1;
+      r.g.alpha = Math.max(0, r.fade) * (1 - nightK * 0.3);
+      if (r.fade <= 0) {
+        r.g.destroy();
+        this.refugees.splice(i, 1);
       }
     }
   }
@@ -178,11 +292,13 @@ export class Scene {
       view.root.pivot.y = slot.y;
       view.root.y = slot.y;
       this.views.set(b.slot, { key: `${b.type}:${b.seed}`, view, born: b.builtAt < 0 ? -10 : this.time, ground: slot.y });
+      this.lastLook = "";
     }
   }
 
   // Repères des emplacements libres quand on construit
-  showSlots(type: string | null, city: CityState, hover: string | null): void {
+  showSlots(type: string | null, state: GameState, hover: string | null): void {
+    const city: CityState = state.city;
     const m = this.markerLayer;
     m.clear();
     if (!type) {
@@ -195,10 +311,11 @@ export class Scene {
     const def = BUILDINGS[type];
     for (const s of SLOTS) {
       if (city.buildings[s.id]) continue;
-      const ok = def.zones.includes(s.zone);
+      const zoneOk = def.zones.includes(s.zone);
+      const ok = zoneOk && !buildError(state, s.id, type);
       const on = s.id === hover;
-      const color = ok ? 0xe8c170 : 0x8a3a3a;
-      const alpha = ok ? (on ? 0.95 : 0.55) : 0.25;
+      const color = ok ? 0xe8c170 : zoneOk ? 0xa07a40 : 0x8a3a3a;
+      const alpha = ok ? (on ? 0.95 : 0.55) : zoneOk ? 0.4 : 0.22;
       m.roundRect(s.x - s.width / 2 + 6, s.y - (on ? 70 : 46), s.width - 12, on ? 70 : 46, 4).fill({ color, alpha: alpha * 0.25 });
       m.roundRect(s.x - s.width / 2 + 6, s.y - (on ? 70 : 46), s.width - 12, on ? 70 : 46, 4).stroke({ width: on ? 2 : 1, color, alpha });
     }
@@ -254,14 +371,16 @@ export class Scene {
       this.lastLook = look;
       const t = this.terrain;
       t.grass.tint = mix(pal.grass, 0xe8ecf0, snow * 0.6);
-      t.fields.tint = mix(pal.field, 0xe8ecf0, snow);
       t.foliage.tint = pal.foliage;
       t.foliage.alpha = v.season.id === "hiver" ? 0.25 : 1 - smooth(0.6, 1, v.seasonIndex === 2 ? v.seasonProgress : 0) * 0.6;
       t.snow.alpha = snow;
       t.peakSnow.alpha = 0.55 + snow * 0.45;
       this.far.tint = mix(pal.far, 0x0c1020, nightK * 0.75);
       this.mid.tint = mix(shade(pal.far, -0.25), 0x080a14, nightK * 0.75);
-      for (const e of this.views.values()) e.view.snow.alpha = snow;
+      for (const e of this.views.values()) {
+        e.view.snow.alpha = snow;
+        if (e.view.crops) e.view.crops.tint = mix(pal.field, 0xe8ecf0, snow);
+      }
     }
 
     // Bâtiments qui sortent de terre
@@ -298,14 +417,15 @@ export class Scene {
       e.g.alpha = nightK * blink * smooth(0.4, 0.8, reach);
     }
 
-    // Habitants : moins nombreux dehors la nuit
+    // Habitants : autant que la population, moins nombreux dehors la nuit, personne aux champs l'hiver
     for (const [i, w] of this.walkers.entries()) {
       w.x += w.speed * dt;
       if (w.x < w.min || w.x > w.max) {
         w.speed = -w.speed;
         w.x = Math.max(w.min, Math.min(w.max, w.x));
       }
-      const out = w.inside || hash01(i * 13) < 0.25 || nightK < 0.6;
+      let out = w.rank < this.visible[w.pool] && (w.inside || hash01(i * 13) < 0.25 || nightK < 0.6);
+      if (w.pool === "plain") out = w.rank < this.visible.plain && !this.winter && nightK < 0.5;
       w.g.visible = out;
       w.g.position.set(w.x, w.y - Math.abs(Math.sin(this.time * 7 + w.phase)) * 1.2);
       w.g.scale.x = w.speed < 0 ? -1 : 1;
@@ -314,6 +434,7 @@ export class Scene {
         w.lantern.alpha = out ? nightK * 0.9 : 0;
       }
     }
+    this.updateRefugees(dt, nightK);
 
     // Fumée des cheminées
     if (this.rng() < dt * 6) {

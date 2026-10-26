@@ -1,8 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { SLOTS, build, canBuild, demolish, population, startingCity } from "../src/engine/city";
+import { SLOTS, build, canBuild, demolish, startingCity } from "../src/engine/city";
 
 describe("cité", () => {
   it("numérote les emplacements par zone", () => {
+    expect(SLOTS.filter((s) => s.zone === "plaine")).toHaveLength(6);
     expect(SLOTS.filter((s) => s.zone === "cite")).toHaveLength(10);
     expect(SLOTS.filter((s) => s.zone === "terrasses")).toHaveLength(8);
     expect(SLOTS.filter((s) => s.zone === "galeries")).toHaveLength(13);
@@ -10,8 +11,8 @@ describe("cité", () => {
 
   it("pose la cité de départ", () => {
     const c = startingCity();
-    expect(Object.keys(c.buildings).length).toBe(13);
-    expect(population(c)).toBeGreaterThan(20);
+    expect(Object.keys(c.buildings).length).toBe(15);
+    expect(Object.values(c.buildings).filter((b) => b.type === "ferme")).toHaveLength(2);
   });
 
   it("refuse une forge hors des galeries et un emplacement occupé", () => {

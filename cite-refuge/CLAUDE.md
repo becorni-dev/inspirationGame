@@ -6,7 +6,9 @@ Benoit débute en programmation : réponds en français, simplement, par petites
 
 ## Règles
 - `src/engine/` : règles pures, sans Pixi ni DOM ; jamais `Math.random()`, utiliser `src/engine/rng.ts`.
-- `src/data/*.json` : chiffres et contenu (bâtiments, emplacements, calendrier).
+- `src/engine/game.ts` : la partie (vivres, bois, peuples, logement, travail, hiver, colonnes de réfugiés). `nextDay` fait passer un jour ; l'interface et `npm run balance` utilisent les mêmes fonctions.
+- `src/data/*.json` : chiffres et contenu (bâtiments, emplacements, calendrier, `economy.json` pour les règles, `refugees.json` pour les colonnes).
 - `src/render/` : dessin Pixi (décor `terrain.ts`, bâtiments `buildings.ts`, scène `scene.ts`). Tout est dessiné par le code ; une image de l'atelier (`public/images/atelier/<id>.png`) pourra remplacer un dessin, qui reste le secours.
 - `src/ui/` : interface HTML par-dessus le canvas.
-- Chaque règle du moteur a un test dans `tests/`. Avant de pousser : `npm test` et `npm run build`.
+- Chaque règle du moteur a un test dans `tests/`. Avant de pousser : `npm test` et `npm run build` ; après un changement de chiffres, `npm run balance`.
+- Plan du jeu (étapes 1 à 6) : dans le dossier de concept. Étapes 1 et 2 faites.

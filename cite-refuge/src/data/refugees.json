@@ -1,0 +1,22 @@
+{
+  "_aide": "Les colonnes de réfugiés qui arrivent au printemps. size : nombre de personnes (min, max). wounded : part de blessés (min, max).",
+  "size": [9, 16],
+  "wounded": [0.15, 0.4],
+  "peoples": {
+    "humain": { "name": "Humains", "one": "Humain", "share": 0.6 },
+    "nain": { "name": "Nains", "one": "Nain", "share": 0.4 }
+  },
+  "origins": {
+    "humain": [
+      { "name": "les fermiers de la vallée de Lys", "story": "Leurs champs sont gris de brume depuis la Saint-Martin. Ils ont marché onze jours en tirant leurs charrettes." },
+      { "name": "les bergers de Combe-Noire", "story": "Les troupeaux sont morts dans une seule nuit. Il ne leur reste que leurs bâtons et leurs enfants." },
+      { "name": "les gens du bac de Pontrive", "story": "La rivière a gelé noire. Ceux qui ont tenté de la traverser ne sont pas revenus." },
+      { "name": "les tisserands de Haute-Lande", "story": "Leur ville a fermé ses portes à l'Ombre, puis à eux. Ils frappent maintenant aux tiennes." }
+    ],
+    "nain": [
+      { "name": "le clan Brasdefer du Mont Cendre", "story": "Leurs galeries se sont emplies de brume. Ils portent leurs marteaux et les cendres de leurs anciens." },
+      { "name": "les mineurs de la Fosse-aux-Cloches", "story": "Les cloches de la mine se sont tues l'une après l'autre. Ils ont scellé la porte derrière eux." },
+      { "name": "les maçons de Roc-Fendu", "story": "Ils ont bâti des remparts pour d'autres toute leur vie. Ceux-là n'ont pas tenu." }
+    ]
+  }
+}

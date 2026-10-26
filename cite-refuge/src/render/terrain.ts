@@ -23,7 +23,6 @@ export const GALLERIES = [
 export interface Terrain {
   root: Container;
   grass: Graphics; // teinté par la saison
-  fields: Graphics;
   foliage: Graphics;
   snow: Graphics; // alpha = neige
   peakSnow: Graphics;
@@ -179,16 +178,6 @@ export function buildTerrain(): Terrain {
   grass.stroke({ width: 1.5, color: 0xdddddd });
   root.addChild(grass);
 
-  // --- Champs hors des murs ---
-  const fields = new Graphics();
-  for (let i = 0; i < 6; i++) {
-    const x0 = 110 + i * 92;
-    fields.poly([x0, GROUND - 2, x0 + 80, GROUND - 2, x0 + 92, GROUND - 14, x0 + 12, GROUND - 14]).fill(0xffffff);
-    for (let k = 0; k < 5; k++) fields.moveTo(x0 + 4 + k * 17, GROUND - 3).lineTo(x0 + 14 + k * 17, GROUND - 13);
-  }
-  fields.stroke({ width: 1, color: 0xbbbbbb });
-  root.addChild(fields);
-
   // --- Remparts et porte, face à la plaine ---
   const wall = new Graphics();
   wall.rect(690, 905, 70, GROUND - 905).fill(0x77736c);
@@ -218,7 +207,7 @@ export function buildTerrain(): Terrain {
   const treeSpots: { x: number; y: number; r: number }[] = [];
   for (let i = 0; i < 26; i++) {
     const x = 20 + hash01(i * 31 + 7) * 620;
-    if (x > 100 && x < 660 && hash01(i) < 0.6) continue;
+    if (x > 80 && x < 660) continue; // la plaine est laissée aux fermes et aux bûcherons
     const r = 14 + hash01(i * 5) * 12;
     const y = GROUND - 4;
     trunks.rect(x - 2.5, y - r * 1.6, 5, r * 1.6).fill(0x4a3424);
@@ -252,7 +241,7 @@ export function buildTerrain(): Terrain {
   snow.rect(655, 854, 50, 6).fill(0xffffff);
   root.addChild(snow);
 
-  return { root, grass, fields, foliage, snow, peakSnow, lightSpots };
+  return { root, grass, foliage, snow, peakSnow, lightSpots };
 }
 
 // Chaînes lointaines, dessinées pour un plan qui défile plus lentement (parallaxe)

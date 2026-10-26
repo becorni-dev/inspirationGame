@@ -1,12 +1,22 @@
 {
-  "_aide": "Les bâtiments du prototype. zones : où on peut les bâtir (cite, terrasses, galeries).",
-  "order": ["maison", "grenier", "phare", "hall", "serre", "forge"],
+  "_aide": "Les bâtiments. zones : où on peut les bâtir (plaine, cite, terrasses, galeries). cost : bois pour bâtir. beds : lits. jobs : postes de travail (onlyPeople : peuple exigé). food / wood : production par travailleur et par jour, selon la saison (printemps, été, automne, hiver).",
+  "order": ["maison", "ferme", "bucheron", "grenier", "serre", "forge", "phare", "hall"],
   "types": {
-    "maison": { "name": "Maison", "key": "1", "zones": ["cite", "terrasses", "galeries"], "desc": "Loge une famille de réfugiés.", "people": 5 },
-    "grenier": { "name": "Grenier", "key": "2", "zones": ["cite"], "desc": "Garde les récoltes pour l'hiver." },
-    "phare": { "name": "Tour-phare", "key": "3", "zones": ["cite", "terrasses"], "desc": "Une grande flamme qui repousse l'Ombre la nuit.", "light": 1.0 },
-    "hall": { "name": "Hall des peuples", "key": "4", "zones": ["cite"], "desc": "Le conseil de la cité s'y réunit.", "people": 3 },
-    "serre": { "name": "Serre elfe", "key": "5", "zones": ["terrasses"], "desc": "Des chants elfes y font pousser des herbes même en hiver." },
-    "forge": { "name": "Forge naine", "key": "6", "zones": ["galeries"], "desc": "Le cœur chaud des galeries : fer et runes.", "people": 4 }
+    "maison": { "name": "Maison", "key": "1", "zones": ["cite", "terrasses", "galeries"], "cost": 20, "beds": 5,
+      "desc": "Loge 5 réfugiés. Dans les galeries, une maison naine : les Nains s'y installent d'abord, et elle se chauffe avec moitié moins de bois." },
+    "ferme": { "name": "Ferme", "key": "2", "zones": ["plaine"], "cost": 20, "jobs": 5,
+      "food": [0.6, 1.0, 1.4, 0], "desc": "Hors des murs : nourrit bien l'été et à la récolte d'automne, rien l'hiver." },
+    "bucheron": { "name": "Bûcheron", "key": "3", "zones": ["plaine"], "cost": 10, "jobs": 3,
+      "wood": [1.0, 1.2, 1.0, 0], "desc": "Coupe le bois de la plaine, rien l'hiver quand l'Ombre couvre les champs." },
+    "grenier": { "name": "Grenier", "key": "4", "zones": ["cite"], "cost": 25, "storage": 150,
+      "desc": "Garde 150 vivres de plus. Ce qui dépasse la place des greniers pourrit." },
+    "serre": { "name": "Serre", "key": "5", "zones": ["terrasses"], "cost": 25, "jobs": 2,
+      "food": [0.8, 0.8, 0.8, 0.8], "desc": "Sous le verre, on cultive même en hiver. Peu, mais tous les jours." },
+    "forge": { "name": "Forge naine", "key": "6", "zones": ["galeries"], "cost": 30, "jobs": 3, "onlyPeople": "nain", "tools": 0.1,
+      "desc": "Seuls les Nains y travaillent. Chaque forge au complet donne des outils : +10 % sur toute la production." },
+    "phare": { "name": "Tour-phare", "key": "7", "zones": ["cite", "terrasses"], "cost": 15, "winterWood": 1, "winterShield": 0.15,
+      "desc": "Brûle 1 bois par jour l'hiver. Sa flamme tient la peur à distance : −15 % de morts l'hiver par phare (au plus −45 %)." },
+    "hall": { "name": "Hall des peuples", "key": "8", "zones": ["cite"], "cost": 40, "columnBonus": 0.3,
+      "desc": "Sa renommée attire du monde : les colonnes de réfugiés sont 30 % plus grandes." }
   }
 }

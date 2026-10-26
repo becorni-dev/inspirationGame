@@ -2,15 +2,25 @@
 import buildingsData from "../data/buildings.json";
 import sitesData from "../data/sites.json";
 
-export type ZoneId = "cite" | "terrasses" | "galeries";
+export type ZoneId = "plaine" | "cite" | "terrasses" | "galeries";
+export type PeopleId = "humain" | "nain";
 
 export interface BuildingType {
   name: string;
   key: string;
   zones: ZoneId[];
   desc: string;
-  people?: number;
-  light?: number;
+  cost: number; // bois
+  beds?: number;
+  jobs?: number;
+  onlyPeople?: PeopleId;
+  food?: number[]; // par travailleur et par jour, selon la saison
+  wood?: number[];
+  storage?: number;
+  tools?: number;
+  winterWood?: number;
+  winterShield?: number;
+  columnBonus?: number;
 }
 
 export interface Slot {
@@ -89,8 +99,4 @@ export function startingCity(): CityState {
   let state: CityState = { buildings: {}, nextSeed: 1 };
   for (const s of sitesData.start) state = build(state, s.slot, s.type, -100);
   return state;
-}
-
-export function population(state: CityState): number {
-  return Object.values(state.buildings).reduce((n, b) => n + (BUILDINGS[b.type].people ?? 0), 0);
 }

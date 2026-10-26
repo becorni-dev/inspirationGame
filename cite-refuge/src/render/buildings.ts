@@ -17,6 +17,7 @@ export interface LightSpot {
 export interface BuildingView {
   root: Container;
   snow: Graphics;
+  crops?: Graphics; // cultures, teintées selon la saison par la scène
   lights: LightSpot[];
   smoke: { x: number; y: number }[];
   topY: number;
@@ -74,7 +75,68 @@ export function drawBuilding(type: string, slot: Slot, seed: number, image: Text
     return { root, snow, lights, smoke, topY: ground - s.height };
   }
 
+  let crops: Graphics | undefined;
   switch (type) {
+    case "ferme": {
+      // Champ en planches, petite grange et meule de foin
+      const w = slot.width * 0.92;
+      const x = slot.x - w / 2;
+      crops = new Graphics();
+      crops.poly([x, ground - 1, x + w * 0.66, ground - 1, x + w * 0.66 + 10, ground - 16, x + 10, ground - 16]).fill(0xffffff);
+      for (let k = 0; k < 7; k++) {
+        const fx = x + 3 + k * (w * 0.66 - 6) / 6;
+        crops.moveTo(fx, ground - 2).lineTo(fx + 9, ground - 15);
+      }
+      crops.stroke({ width: 1.5, color: 0xb0b0b0 });
+      snow.poly([x, ground - 1, x + w * 0.66, ground - 1, x + w * 0.66 + 10, ground - 16, x + 10, ground - 16]).fill({ color: 0xf6f8fc, alpha: 0.95 });
+      const bx = x + w * 0.7;
+      const bw = w * 0.28;
+      box(g, bx, ground, bw, 20, 0x6e4a2e, false);
+      for (let k = 3; k < bw; k += 5) g.rect(bx + k, ground - 20, 1.2, 20).fill(0x55381f);
+      g.rect(bx + bw / 2 - 4, ground - 12, 8, 12).fill(0x3a2616);
+      windowAt(g, lights, bx + 3, ground - 17, 5, 5, 0x55381f);
+      topY = gable(g, snow, bx, ground - 20, bw, 14, 0x5a3e2c);
+      // Épouvantail
+      const sx = x + w * 0.35;
+      g.rect(sx - 0.8, ground - 30, 1.6, 22).fill(0x4a3424);
+      g.rect(sx - 7, ground - 25, 14, 1.6).fill(0x4a3424);
+      g.circle(sx, ground - 31, 2.6).fill(0xc9a650);
+      g.poly([sx - 4, ground - 32, sx + 4, ground - 32, sx, ground - 37]).fill(0x3a2a20);
+      root.addChild(crops);
+      break;
+    }
+    case "bucheron": {
+      // Cabane de rondins, bûches empilées, quelques pins à abattre
+      for (let k = 0; k < 3; k++) {
+        const px = slot.x - slot.width * 0.32 + k * 14 + r(30 + k) * 6;
+        const h = 44 + r(40 + k) * 26;
+        g.rect(px - 2, ground - 8, 4, 8).fill(0x3a2a1e);
+        g.poly([px - h * 0.3, ground - 6, px + h * 0.3, ground - 6, px, ground - h]).fill(shade(0x2f4a35, -r(50 + k) * 0.3));
+        snow.poly([px - h * 0.16, ground - h * 0.55, px + h * 0.16, ground - h * 0.55, px, ground - h]).fill(0xf6f8fc);
+      }
+      const w = slot.width * 0.42;
+      const x = slot.x - w / 2 + 8;
+      box(g, x, ground, w, 22, 0x6a4a30, false);
+      for (let y = ground - 4; y > ground - 22; y -= 4.5) g.rect(x, y, w, 1.2).fill(0x4a3220);
+      g.rect(x + w / 2 - 4, ground - 14, 8, 14).fill(0x2f1f12);
+      windowAt(g, lights, x + w - 10, ground - 17, 6, 6, 0x4a3220);
+      topY = gable(g, snow, x, ground - 22, w, 16, 0x4a3a30);
+      g.rect(x + 4, ground - 36, 6, 12).fill(0x6b5d52);
+      smoke.push({ x: x + 7, y: ground - 37 });
+      // Bûches
+      const lx = x + w + 10;
+      for (let row = 0; row < 3; row++) for (let k = 0; k < 3 - row; k++) {
+        const cx2 = lx + k * 7 + row * 3.5;
+        const cy2 = ground - 3.5 - row * 6.5;
+        g.circle(cx2, cy2, 3.4).fill(0x8a6a44);
+        g.circle(cx2, cy2, 1.6).fill(0xb89464);
+      }
+      // Souche et hache
+      g.rect(x - 14, ground - 7, 9, 7).fill(0x6a4a30);
+      g.rect(x - 9, ground - 15, 1.4, 9).fill(0x4a3424);
+      g.rect(x - 11, ground - 15, 5, 3).fill(0x9aa0a6);
+      break;
+    }
     case "maison": {
       const inside = slot.zone === "galeries";
       const w = slot.width * (0.55 + r(1) * 0.15);
@@ -219,5 +281,5 @@ export function drawBuilding(type: string, slot: Slot, seed: number, image: Text
     }
   }
   root.addChild(g, snow);
-  return { root, snow, lights, smoke, topY };
+  return { root, snow, crops, lights, smoke, topY };
 }
